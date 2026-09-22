@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>化学废液混配审查系统</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <h1>🧪 化学废液混配审查系统</h1>
+    <p>录入废液批次 → 禁配规则审查 → 安全容器分组 → 场景保存 / 恢复 / 导出</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2><span class="step">1</span> 批次录入</h2>
+      <form id="batch-form">
+        <div class="form-grid">
+          <label>批次名称
+            <input type="text" id="f-name" required maxlength="100" placeholder="如：含氰电镀废液">
+          </label>
+          <label>体积 (L)
+            <input type="number" id="f-volume" min="0" step="0.1" value="10">
+          </label>
+          <label>pH（0–14）
+            <input type="number" id="f-ph" min="0" max="14" step="0.1" value="7">
+          </label>
+          <div class="check-row">
+            <label class="check"><input type="checkbox" id="f-oxidizing"> 氧化性</label>
+            <label class="check"><input type="checkbox" id="f-volatile"> 挥发性</label>
+          </div>
+        </div>
+        <div class="tag-group">
+          <span class="tag-label">禁配标签：</span>
+          <div id="tag-checks"></div>
+        </div>
+        <div class="actions">
+          <button type="submit" class="primary">＋ 添加批次</button>
+          <button type="button" id="btn-samples" class="secondary">载入示例批次</button>
+          <button type="button" id="btn-clear" class="danger">清空全部</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2><span class="step">2</span> 当前批次 <span id="batch-count" class="pill"></span></h2>
+      <div class="table-wrap">
+        <table id="batch-table">
+          <thead>
+            <tr>
+              <th>#</th><th>名称</th><th>体积 (L)</th><th>pH</th>
+              <th>氧化性</th><th>挥发性</th><th>标签</th><th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p class="empty" id="batch-empty">暂无批次，请先录入。</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span class="step">3</span> 审查结果</h2>
+      <div class="actions">
+        <button id="btn-review" class="primary">▶ 运行审查</button>
+        <button id="btn-export-current" class="secondary">导出当前审查 JSON</button>
+      </div>
+      <div id="review-result"><p class="empty">尚未运行审查。</p></div>
+    </section>
+
+    <section class="card">
+      <h2><span class="step">4</span> 场景管理</h2>
+      <div class="scenario-save">
+        <input type="text" id="scenario-name" maxlength="100" placeholder="场景名称，如：2026Q3-东区暂存间">
+        <button id="btn-save-scenario" class="primary">保存当前为场景</button>
+      </div>
+      <ul id="scenario-list"></ul>
+      <p class="empty" id="scenario-empty">暂无已保存场景。</p>
+    </section>
+
+    <section class="card">
+      <h2>内置禁配规则</h2>
+      <div class="table-wrap">
+        <table id="rules-table">
+          <thead><tr><th>编号</th><th>规则</th><th>等级</th><th>说明</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>化学废液混配审查系统 · 内置规则仅供辅助审查，实际处置请遵循当地法规与 SDS</footer>
+  <div id="toast"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
