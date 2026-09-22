@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>化学废液混配审查系统</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>🧪 化学废液混配审查系统</h1>
+    <p class="subtitle">录入废液批次 → 自动禁配分组 → 冲突诊断 → 场景存档与导出</p>
+  </header>
+
+  <main>
+    <!-- 左栏：批次录入与列表 -->
+    <section class="panel" id="panel-input">
+      <h2>① 废液批次录入</h2>
+      <form id="batch-form">
+        <label>批次名称
+          <input type="text" id="f-name" required maxlength="100" placeholder="如：含氰电镀废液">
+        </label>
+        <div class="row">
+          <label>体积 (L)
+            <input type="number" id="f-volume" min="0" step="0.1" value="20">
+          </label>
+          <label>pH（0–14）
+            <input type="number" id="f-ph" min="0" max="14" step="0.1" value="7">
+          </label>
+        </div>
+        <div class="row flags">
+          <label class="check"><input type="checkbox" id="f-oxidizing"> 氧化性</label>
+          <label class="check"><input type="checkbox" id="f-volatile"> 挥发性</label>
+        </div>
+        <fieldset>
+          <legend>禁配标签</legend>
+          <div id="tag-box" class="tags"></div>
+        </fieldset>
+        <div class="btn-row">
+          <button type="submit" class="primary">＋ 添加批次</button>
+          <button type="button" id="btn-demo">载入示例</button>
+          <button type="button" id="btn-clear" class="danger">清空</button>
+        </div>
+      </form>
+
+      <h3>当前批次 <span id="batch-count" class="badge">0</span></h3>
+      <ul id="batch-list" class="batch-list"></ul>
+    </section>
+
+    <!-- 右栏：审查结果 -->
+    <section class="panel" id="panel-review">
+      <h2>② 混配审查</h2>
+      <div class="btn-row">
+        <button id="btn-review" class="primary">▶ 运行审查</button>
+        <button id="btn-export-json">导出 JSON</button>
+        <button id="btn-export-csv">导出 CSV</button>
+        <button id="btn-export-md">导出报告</button>
+      </div>
+      <div id="review-result"><p class="hint">添加批次后点击「运行审查」。</p></div>
+
+      <h2>③ 场景存档</h2>
+      <div class="btn-row">
+        <input type="text" id="scenario-name" placeholder="场景名称，如：电镀车间 9 月" maxlength="100">
+        <button id="btn-save-scenario" class="primary">保存当前场景</button>
+      </div>
+      <ul id="scenario-list" class="scenario-list"></ul>
+    </section>
+  </main>
+
+  <footer>
+    <span>内置 <span id="rule-count">–</span> 条反应禁配规则 · 数据存于本地 SQLite</span>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

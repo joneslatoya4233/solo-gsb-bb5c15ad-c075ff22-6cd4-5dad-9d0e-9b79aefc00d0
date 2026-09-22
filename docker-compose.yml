@@ -1,0 +1,12 @@
+services:
+  waste-review:
+    build: .
+    container_name: waste-review
+    ports:
+      - "8000:8000"
+    volumes:
+      - waste-data:/data
+    restart: unless-stopped
+
+volumes:
+  waste-data:
